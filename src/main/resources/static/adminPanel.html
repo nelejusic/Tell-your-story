@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html>
+
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <title>Ispričaj svoju priču</title>
+
+
+    <meta charset="UTF-8">
+    <meta name="Description" content="Ovo je  prica">
+
+    <style>
+        body {
+    padding: 0;
+    margin: 0;
+    background: #0000005b;
+
+}
+.navbar {
+    background:#fdfdfd5b;
+     position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+.nav-link,
+.navbar-brand {
+    color: rgb(0, 0, 0);
+    font-weight:bold;
+    cursor: pointer;
+    font-style:italic;
+}
+.nav-link {
+    margin-right: 1em !important;
+}
+.nav-link:hover {
+    color: #000;
+}
+.navbar-collapse {
+    justify-content: flex-end;
+}.navbar-btn{
+    color: rgb(88, 60, 60);
+}
+body {
+  background: linear-gradient(#e8e8e8, #e0e0e0);
+   background-image: url("https://www.conduit.consulting/wp-content/uploads/2018/10/gossip-pop-art-men-1firlo0-1200x640.jpg");
+}
+
+.wrapper {
+  display:flex;
+  flex-flow:column;
+  justify-content:center;
+  align-items:center;
+  width:100%;
+}
+
+.card {
+  width:50%;
+  height:auto;
+  background: rgba(0, 0, 0, 0.6);
+  margin-top:20px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+  color: #333;
+  padding: 40px;
+  padding-bottom:10px;
+}
+
+  .author {
+    display: block;
+    font-style: italic;
+    font-size: 14px;
+    color: #ffffff;
+    text-align:right;
+  }
+  .content{
+   display: block;
+   font-style: italic;
+   font-size: 30px;
+   color: #ffffff;
+
+
+  }
+
+
+@for $i from 1 through 8 {
+  .card:nth-child(#{$i}n) {
+    top: $i * 20px;
+  }
+}
+.approve{
+width:30%;
+margin:20px;
+
+
+}.decline{
+width:30%;
+margin:20px;
+
+}
+.approveStory{
+        display: inline-flex;
+        flex-direction:row;
+        width:50%;
+        margin:auto;
+
+}
+.title{
+    font-size:20px;
+    color: #ffffff;
+    font-family: "Lucida Console", monospace;
+    font-style: italic;
+    font-weight:bold;
+
+}
+
+   </style>
+</head>
+
+
+<body>
+<nav  class="navbar navbar-expand-md">
+
+    <a class="navbar-brand" href="index.html" >
+        <img src="https://static.scientificamerican.com/sciam/cache/file/00A865C6-9F1F-4412-A9CA2FC329C15F36_source.jpg?w=590&h=800&08F4EA30-9038-4EB2-8EBF9195D8829B6C" width="30" height="30" class="d-inline-block align-top" alt="shh">
+        Ispričaj svoju priču
+    </a>
+    <button class="navbar-toggler navbar-dark" type="button" data-toggle="collapse" data-target="#main-navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="main-navigation">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="index.html" class="btn btn-dark" role="button">Priče</a>
+            </li>
+            <li class="nav-item">
+                <a href="tellYourStory.html" class="btn btn-dark" role="button" >Podijeli priču</a>
+            </li>
+            <li class="nav-item">
+                <a href="adminPanel.html" class="btn btn-dark" role="button">Admin</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+
+
+<div id="xxx" class="wrapper">
+
+</div>
+
+
+
+</body>
+<script>
+ function loadStory(){
+    console.log("test");
+    $.ajax({
+        type: 'GET',
+        url: '/api/stories',
+        data: {
+            format: 'json'
+        },   error: function() {
+            var $error = $('<h1>').text('An error has occurred');
+            $('#stories').append($error);
+        },
+
+
+        dataType: 'json',
+        success: function(data) {
+            $('#xxx').empty();
+            data.forEach(element => {
+                const div = $('<div></div>');
+                const wrapper = $('<div></div>').addClass('wrapper');
+                const card = $('<div></div>').addClass('card');
+                const naslov = $('<h2></h2>').text(element.title).addClass('title');
+                const paragraph = $('<p></p>').text(element.content).addClass('content');
+                const autor = $('<p></p>').text(element.author).addClass('author');
+                const buttonHolder =  $("<div style='margin:0 auto;'></div>");
+                const approveButton = $("<button type='button' style='height:25px; font-size:10px; width:100px;' class='btn btn-success  '   onclick ='approveStory("+element.id+")'>approve</button>");
+                const declineButton =  $("<button   type='button' style='height:25px; font-size:10px; width:100px;'  class='btn btn-danger  ' onclick ='deleteStory("+element.id+")'>decline</button>");
+
+                buttonHolder.append(approveButton);
+                buttonHolder.append(declineButton);
+                card.append(naslov)
+                card.append(paragraph)
+                card.append(autor)
+                card.append(buttonHolder);
+
+                wrapper.append(card);
+                $('#xxx').append(wrapper);
+            });
+
+        }
+    });
+
+} function approveStory(id){
+
+    console.log("post story: " + id);
+    $.ajax({
+            type: 'POST',
+            url: '/api/stories/publish/' +id,
+            error: function () {
+        var $error = $('<h1>').text('An error has occurred');
+        $('#stories').append($error);
+      },
+            success: function(data) {
+                loadStory();
+            }
+        });
+}
+function deleteStory(id) {
+    selectedStory = id;
+    console.log("delete : " + id);
+    $.ajax({
+      type: 'DELETE',
+      url: '/api/stories/' + id,
+      error: function () {
+        var $error = $('<h1>').text('An error has occurred');
+        $('#stories').append($error);
+      },
+      success: function (data) {
+        loadStory();
+      }
+    });
+  }
+
+$(document).ready(function(){
+    loadStory();
+});
+
+
+</script>
+
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <meta charset="UTF-8">
+    <title>Podijeli svoju priču</title>
+    <style>
+            body {
+        padding: 0;
+        margin: 0;
+        background: #f2f6e9;
+
+    }
+    .navbar {
+    background:#fdfdfd5b;
+}
+.nav-link,
+.navbar-brand {
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}
+.nav-link {
+    margin-right: 1em !important;
+}
+.nav-link:hover {
+    color: #000;
+}
+.navbar-collapse {
+    justify-content: flex-end;
+}.navbar-btn{
+    color: rgb(88, 60, 60);
+}
+    body {
+     background-image: url("https://hazlitt.net/sites/default/files/styles/article-header-image/public/field/image/gossip-illo-web.jpg?itok=ELA1gHGp");
+ background-size: cover;
+     background-color: #cccccc;
+    }
+
+
+
+input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid rgb(2, 2, 2);
+  box-sizing: border-box;
+}
+
+
+button {
+  background-color: #080808;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+
+button:hover {
+  opacity: 0.8;
+}
+
+
+
+.container {
+  margin: auto;
+  width: 50%;
+
+  padding: 16px;
+  vertical-alig:middle;
+}
+
+  .cardInput{
+   width:50%;
+  height:auto;
+  background: rgba(0, 0, 0, 0.6);
+  margin : auto;
+  margin-top:50px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+  color: #333;
+  padding: 40px;
+  padding-bottom:10px;
+  }
+
+       </style>
+</head>
+<body>
+
+<nav  class="navbar navbar-expand-md">
+
+    <a class="navbar-brand" href="index.html" >
+        <img src="https://static.scientificamerican.com/sciam/cache/file/00A865C6-9F1F-4412-A9CA2FC329C15F36_source.jpg?w=590&h=800&08F4EA30-9038-4EB2-8EBF9195D8829B6C" width="30" height="30" class="d-inline-block align-top" alt="shh">
+        Ispričaj svoju priču
+    </a>
+    <button class="navbar-toggler navbar-dark" type="button" data-toggle="collapse" data-target="#main-navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="main-navigation">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="index.html" class="btn btn-dark" role="button">Priče</a>
+            </li>
+            <li class="nav-item">
+                <a href="tellYourStory.html" class="btn btn-dark" role="button" >Podijeli priču</a>
+            </li>
+            <li class="nav-item">
+                <a href="adminPanel.html" class="btn btn-dark" role="button">Admin</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+
+<div class="cardInput">
+
+    <label for="author" style="color : white; font-style: italic; "><b>Autor</b></label>
+    <input type="text" placeholder="Unesite ime" style="color: white;  border-color:white; background-color: transparent;" name="author" id="author" required>
+    <label for="title" style="color : white; font-style : italic;"><b>Naslov</b></label>
+    <input type="text" placeholder="Unesite naslov" style="color: white;  border-color:white; background-color: transparent;" name="text" id="title" required>
+    <label for="content" style=" color : white;  font-style : italic; "><b>Sadržaj</b></label>
+    <textarea  rows="4" cols="50" placeholder="Unesite sadržaj" style="height:100px;  color: white;  border-color:white; background-color: transparent; display: block;" name="text" id="content" required>
+    </textarea>
+    <button id="addStoryButton" type="button">Dodaj</button>
+
+</div>
+<script>
+
+    $(document).ready(function(){
+        $("#addStoryButton").click(function(){
+
+            var Story = {
+                        title: $("#title").val(),
+                        author: $("#author").val(),
+                        content: $("#content").val(),
+                        date: new Date().toISOString()
+            };
+           if(Story.title !== "" && Story.author!== "" && Story.content !== "" && Story.date !==""){
+              $.ajax({
+                type: 'POST',
+                url: '/api/stories',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(Story),
+
+
+
+
+            }); alert("Uspjesno ste dodali svouju priču");
+
+           } else alert("Niste popunili sva polja");
+
+
+
+        });
+    });$(document).ready(function(){
+
+});
+</script>
+
+</body>
+
+</html>
